@@ -1,73 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
-import RenderBlock from "./components/RenderBlock";
 import Sidebar from "./Components/Sidebar";
 import Preview from "./Components/Preview";
+import Editor from "./Components/Editor";
 import { generateEmailHTML } from "./utils/exportHtml";
 import ExportHtmlModal from "./Components/ExportHtmlModal";
-import { useState } from "react";
 
 export default function App() {
-  // =========================
-  // Day 2 – Blocks state
-  // =========================
+  // ===== Day 2: Blocks data =====
   const [blocks, setBlocks] = useState([]);
 
-  // =========================
-  // Day 5 – Export states
-  // =========================
+  // ===== Day 6: Selected block =====
+  const [selectedBlockId, setSelectedBlockId] = useState(null);
+
+  // ===== Day 5: Export HTML =====
   const [showExport, setShowExport] = useState(false);
   const [html, setHtml] = useState("");
 
-  // =========================
-  // ✅ FIX: Add block handler
-  // =========================
-  const handleAddBlock = (type) => {
-    const newBlock = {
-      id: Date.now(),
-      type,
-      content:
-        type === "text"
-          ? "This is a text block"
-          : type === "image"
-          ? "https://via.placeholder.com/600x200"
-          : "Click Me",
-    };
+  // ===== Day 6: Find selected block =====
+  const selectedBlock = blocks.find((block) => block.id === selectedBlockId);
 
-    setBlocks((prev) => [...prev, newBlock]);
+  // ===== Day 6: Update block content =====
+  const updateBlock = (value) => {
+    if (!selectedBlockId) return;
+
+    setBlocks((prev) =>
+      prev.map((b) => (b.id === selectedBlockId ? { ...b, content: value } : b))
+    );
   };
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-12 gap-6">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-slate-800">
+          AI Email Template Builder
+        </h1>
+
+        <button
+          onClick={() => {
+            setHtml(generateEmailHTML(blocks));
+            setShowExport(true);
+          }}
+          className="px-4 py-2 bg-emerald-600 text-white rounded-lg"
+        >
+          Export HTML
+        </button>
+      </div>
+
+      {/* Main layout */}
+      <div className="grid grid-cols-12 gap-6">
         {/* Sidebar */}
         <div className="col-span-3">
-          {/* ✅ PASS FUNCTION */}
-          <Sidebar onAdd={handleAddBlock} />
+          <Sidebar onAdd={setBlocks} />
         </div>
 
         {/* Preview */}
-        <div className="col-span-9">
-          <Preview blocks={blocks} />
+        <div className="col-span-6">
+          <Preview blocks={blocks} onSelect={setSelectedBlockId} />
+        </div>
 
-          {/* Export Button */}
-          <button
-            onClick={() => {
-              setHtml(generateEmailHTML(blocks));
-              setShowExport(true);
-            }}
-            className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
-          >
-            Export HTML
-          </button>
+        {/* Editor */}
+        <div className="col-span-3">
+          <Editor block={selectedBlock} onUpdate={updateBlock} />
         </div>
       </div>
 
+      {/* Export Modal */}
       {showExport && (
-        <ExportHtmlModal
-          html={html}
-          onClose={() => setShowExport(false)}
-        />
+        <ExportHtmlModal html={html} onClose={() => setShowExport(false)} />
       )}
     </div>
   );
