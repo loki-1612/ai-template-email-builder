@@ -1,52 +1,44 @@
 import React from "react";
 
 export default function Editor({ block, onUpdate }) {
-  // If no block is selected, show a helper message
   if (!block) {
     return (
-      <div className="bg-white border border-slate-200 rounded-lg p-4 text-slate-500">
-        Select a block to edit
+      <div className="bg-white rounded-xl shadow border border-slate-200 p-6 text-sm text-slate-500">
+        Select a block from the preview to edit its content
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 space-y-3">
-      <h3 className="text-lg font-semibold text-slate-800">
+    <div className="bg-white rounded-xl shadow border border-slate-200 p-6 space-y-4">
+      <h2 className="text-lg font-semibold text-slate-800">
         Edit {block.type} block
-      </h3>
+      </h2>
 
-      {/* TEXT BLOCK */}
-      {block.type === "text" && (
-        <textarea
-          value={block.content}
-          onChange={(e) => onUpdate(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          rows={4}
-          placeholder="Edit text content"
-        />
+      {(block.type === "text" || block.type === "button") && (
+        <>
+          <label className="text-sm text-slate-600">
+            Content
+          </label>
+          <input
+            value={block.content}
+            onChange={(e) => onUpdate(e.target.value)}
+            className="w-full border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </>
       )}
 
-      {/* IMAGE BLOCK */}
       {block.type === "image" && (
-        <input
-          type="text"
-          value={block.content}
-          onChange={(e) => onUpdate(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Enter image URL"
-        />
-      )}
-
-      {/* BUTTON BLOCK */}
-      {block.type === "button" && (
-        <input
-          type="text"
-          value={block.content}
-          onChange={(e) => onUpdate(e.target.value)}
-          className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Edit button text"
-        />
+        <>
+          <label className="text-sm text-slate-600">
+            Image URL
+          </label>
+          <input
+            value={block.content}
+            onChange={(e) => onUpdate(e.target.value)}
+            className="w-full border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </>
       )}
     </div>
   );
