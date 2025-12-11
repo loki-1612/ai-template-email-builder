@@ -3,7 +3,7 @@ import App from "../App";
 
 export default function Sidebar({ onAdd }) {
   return (
-    <div className="h-90 bg-slate-900 rounded-xl shadow-lg text-white p-4 space-y-4">
+    <div className="h-70 bg-slate-900 rounded-xl shadow-lg text-white p-4 space-y-4">
       <h2 className="text-lg font-semibold tracking-wide mb-4">Blocks</h2>
 
       <button
