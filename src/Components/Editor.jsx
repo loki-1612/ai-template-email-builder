@@ -1,18 +1,19 @@
 import React from "react";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Editor({ block, onUpdate }) {
   const [loading, setLoading] = useState(false);
 
   if (!block) {
     return (
-      <div className="bg-white border rounded-xl p-6 text-gray-500 text-sm">
+      <div className="bg-white border border-slate-200 rounded-xl p-6 text-slate-500 text-sm shadow-sm">
         Select a block to edit
       </div>
     );
   }
 
-  // 🧠 Day 8: Fake AI Generator
+  // 🧠 Day 8: Fake AI Generator (UNCHANGED)
   const generateAIText = async () => {
     setLoading(true);
 
@@ -43,7 +44,12 @@ export default function Editor({ block, onUpdate }) {
   };
 
   return (
-    <div className="bg-white border rounded-xl p-6 space-y-4 shadow-sm">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="bg-white border border-slate-200 rounded-xl p-6 space-y-4 shadow-md"
+    >
       <h2 className="text-lg font-semibold text-slate-800">Edit Block</h2>
 
       {/* TEXT BLOCK */}
@@ -53,19 +59,23 @@ export default function Editor({ block, onUpdate }) {
             value={block.content}
             disabled={loading}
             onChange={(e) => onUpdate(e.target.value)}
-            className={`w-full border rounded-lg p-3 text-sm resize-none min-h-[120px]
-              ${loading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
+            className={`w-full border rounded-lg p-3 text-sm resize-none min-h-[120px] transition
+              focus:outline-none focus:ring-2 focus:ring-indigo-500
+              ${loading ? "bg-slate-100 cursor-not-allowed" : "bg-white"}
             `}
           />
 
           {/* DAY 8 AI BUTTON */}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.15 }}
             onClick={generateAIText}
             disabled={loading}
-            className="w-full py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 disabled:opacity-60"
+            className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 disabled:opacity-60"
           >
             {loading ? "Generating with AI..." : "Generate with AI"}
-          </button>
+          </motion.button>
         </>
       )}
 
@@ -75,7 +85,7 @@ export default function Editor({ block, onUpdate }) {
           type="text"
           value={block.content}
           onChange={(e) => onUpdate(e.target.value)}
-          className="w-full border rounded-lg p-2 text-sm"
+          className="w-full border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           placeholder="Image URL"
         />
       )}
@@ -86,10 +96,10 @@ export default function Editor({ block, onUpdate }) {
           type="text"
           value={block.content}
           onChange={(e) => onUpdate(e.target.value)}
-          className="w-full border rounded-lg p-2 text-sm"
+          className="w-full border rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           placeholder="Button text"
         />
       )}
-    </div>
+    </motion.div>
   );
 }
