@@ -1,9 +1,9 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Editor({ block, onUpdate }) {
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState("welcome");
 
   if (!block) {
     return (
@@ -13,34 +13,52 @@ export default function Editor({ block, onUpdate }) {
     );
   }
 
-  // 🧠 Day 8: Fake AI Generator (UNCHANGED)
-  const generateAIText = async () => {
+  // ===== Day 12: AI samples by category =====
+  const aiSamples = {
+    welcome: [
+      "Welcome to our community! We’re thrilled to have you here.",
+      "Thanks for joining us! Let’s help you get started smoothly.",
+    ],
+    promotional: [
+      "Flash Sale: Save 40% today only. Don’t miss out!",
+      "New arrival alert! Explore our latest collection now.",
+    ],
+    transactional: [
+      "Your order has been confirmed and is on its way.",
+      "Password reset requested. Please follow the link to continue.",
+    ],
+    newsletter: [
+      "This month’s highlights include new features and tips.",
+      "Here’s a quick update on what’s new and improved.",
+    ],
+    event: [
+      "You’re invited! Join us for an exclusive webinar.",
+      "Save the date — our upcoming event is just around the corner.",
+    ],
+    reengagement: [
+      "We miss you! Here’s something special to welcome you back.",
+      "Your cart is waiting — complete your purchase today.",
+    ],
+    feedback: [
+      "How did we do? Share your feedback with us.",
+      "Got a minute? Tell us what you think and help us improve.",
+    ],
+    announcement: [
+      "Big news! We’re launching something exciting.",
+      "Important update regarding your account — read more inside.",
+    ],
+  };
+
+  // ===== Day 12: AI generator =====
+  const generateAIText = () => {
     setLoading(true);
 
     setTimeout(() => {
-      const samples = [
-        "Welcome to our newsletter! We’re excited to bring you meaningful updates and helpful insights.",
-        "Here’s what’s new this week — fresh updates, useful tips, and features designed for you.",
-        "Thanks for staying connected with us. Explore our latest news and product highlights.",
-        "We’ve curated this update to help you stay informed, inspired, and ahead of the curve.",
-        "Discover important updates and announcements crafted to add value to your day.",
-        "Stay tuned for exciting features, improvements, and stories from our team.",
-        "This edition brings you key updates and insights you don’t want to miss.",
-        "We’re happy to share the latest developments and improvements with you.",
-        "Catch up on what’s happening and see how we’re continuing to improve.",
-        "Our latest update focuses on clarity, performance, and user experience.",
-        "Explore new enhancements and tips designed to make your workflow easier.",
-        "This message highlights recent changes and what they mean for you.",
-        "We appreciate your support — here’s a quick look at what’s new.",
-        "Find out how our latest updates can help you work smarter.",
-        "We’re committed to bringing you relevant updates that truly matter.",
-      ];
-
+      const samples = aiSamples[category];
       const aiText = samples[Math.floor(Math.random() * samples.length)];
-
       onUpdate(aiText);
       setLoading(false);
-    }, 1200);
+    }, 1000);
   };
 
   return (
@@ -65,7 +83,23 @@ export default function Editor({ block, onUpdate }) {
             `}
           />
 
-          {/* DAY 8 AI BUTTON */}
+          {/* ===== Day 12: Category selector ===== */}
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full border rounded-lg p-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="welcome">Welcome</option>
+            <option value="promotional">Promotional</option>
+            <option value="transactional">Transactional</option>
+            <option value="newsletter">Newsletter</option>
+            <option value="event">Event</option>
+            <option value="reengagement">Re-engagement</option>
+            <option value="feedback">Feedback</option>
+            <option value="announcement">Announcement</option>
+          </select>
+
+          {/* ===== AI BUTTON ===== */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
@@ -74,7 +108,7 @@ export default function Editor({ block, onUpdate }) {
             disabled={loading}
             className="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 disabled:opacity-60"
           >
-            {loading ? "Generating with AI..." : "Generate with AI"}
+            {loading ? "Generating..." : "Generate with AI"}
           </motion.button>
         </>
       )}

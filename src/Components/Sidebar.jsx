@@ -2,6 +2,13 @@ import React from "react";
 import { motion } from "framer-motion";
 
 export default function Sidebar({ onAdd }) {
+
+  const createBlock = (type, content) => ({
+    id: Date.now() + Math.random(),
+    type,
+    content,
+  });
+
   return (
     <div className="h-full bg-slate-900 rounded-xl shadow-lg text-white p-5 space-y-5">
       <h2 className="text-lg font-semibold tracking-wide">Blocks</h2>
@@ -14,11 +21,7 @@ export default function Sidebar({ onAdd }) {
         onClick={() =>
           onAdd((prev) => [
             ...prev,
-            {
-              id: Date.now(),
-              type: "text",
-              content: "This is a text block",
-            },
+            createBlock("text", "This is a text block"),
           ])
         }
         className="w-full bg-slate-700 hover:bg-slate-600 rounded-lg py-2.5 font-medium shadow-sm flex items-center justify-center gap-2"
@@ -34,11 +37,7 @@ export default function Sidebar({ onAdd }) {
         onClick={() =>
           onAdd((prev) => [
             ...prev,
-            {
-              id: Date.now(),
-              type: "image",
-              content: "https://via.placeholder.com/600x200",
-            },
+            createBlock("image", "https://via.placeholder.com/600x200"),
           ])
         }
         className="w-full bg-slate-700 hover:bg-slate-600 rounded-lg py-2.5 font-medium shadow-sm flex items-center justify-center gap-2"
@@ -54,11 +53,7 @@ export default function Sidebar({ onAdd }) {
         onClick={() =>
           onAdd((prev) => [
             ...prev,
-            {
-              id: Date.now(),
-              type: "button",
-              content: "Click Me",
-            },
+            createBlock("button", "Click me"),
           ])
         }
         className="w-full bg-slate-700 hover:bg-slate-600 rounded-lg py-2.5 font-medium shadow-sm flex items-center justify-center gap-2"

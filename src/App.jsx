@@ -21,10 +21,14 @@ export default function App() {
   const selectedBlock =
     blocks.find((block) => block.id === selectedBlockId) || null;
 
-  // ===== Day 9: Saved templates =====
-  const [templates, setTemplates] = useState(
-    JSON.parse(localStorage.getItem("emailTemplates")) || []
-  );
+  // ===== Day 12: Code Stability =====
+  const [templates, setTemplates] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("emailTemplates")) || [];
+    } catch {
+      return [];
+    }
+  });
 
   // ===== Day 10: Drag index =====
   const [dragIndex, setDragIndex] = useState(null);
@@ -40,7 +44,7 @@ export default function App() {
 
   // ===== Day 10: Move block =====
   const moveBlock = (from, to) => {
-    if (from === to) return;
+    if (from === null || to === null || from === to) return;
 
     setBlocks((prev) => {
       const updated = [...prev];
@@ -57,7 +61,7 @@ export default function App() {
     const newTemplate = {
       id: Date.now(),
       name: `Template ${templates.length + 1}`,
-      blocks,
+      blocks:JSON.parse(JSON.stringify(blocks)),
     };
 
     const updated = [...templates, newTemplate];

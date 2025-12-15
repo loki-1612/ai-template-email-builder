@@ -5,8 +5,6 @@ export default function Preview({
   blocks,
   onSelect,
   selectedBlockId,
-
-  // ===== DAY 10: drag & drop props =====
   dragIndex,
   setDragIndex,
   moveBlock,
@@ -21,8 +19,8 @@ export default function Preview({
             Add blocks from the sidebar to start building your email
           </div>
         )}
-
-        {blocks.map((block, index) => {
+        
+        {Array.isArray(blocks) && blocks.map((block, index) => {
           const isSelected = block.id === selectedBlockId;
 
           // ===== COMMON WRAPPER (UNCHANGED LOGIC) =====
@@ -32,6 +30,7 @@ export default function Preview({
             onDragOver: (e) => e.preventDefault(),
             onDrop: () => moveBlock(dragIndex, index),
             onClick: () => onSelect(block.id),
+            onMouseDown: (e) => e.stopPropagation(),
             className: `cursor-grab active:cursor-grabbing transition-all rounded-lg border
               ${
                 isSelected
